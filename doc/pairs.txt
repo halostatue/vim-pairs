@@ -1,0 +1,278 @@
+*pairs.txt*  Pairs of handy bracket mappings
+
+Author:   Austin Ziegler
+Based on: tpope/vim-unimpaired by Tim Pope <http://tpo.pe/>
+License:  Same terms as Vim itself (see |license|)
+
+This plugin is only available if 'compatible' is not set.
+
+INTRODUCTION                                    *pairs*
+
+This is a vim9script port of Tim Pope's tpope/vim-unimpaired. It differs from
+tpope/vim-unimpaired in a few different ways:
+
+- the `<Plug>(unimpaired-*)` mappings have been renamed to `<Plug>(pairs-*)`;
+- the `<Plug>unimpaired*` mappings have been removed;
+- several additional mappings have been added (some from pull requests on
+  unimpaired, others from phongnh/vim-toggler u riceissa/vim-more-toggling);
+- the mapping functions previously defined in `plugin/unimpaired.vim` have
+  been moved to `autoload/pairs.vim` to allow easier addition of mappings
+  using the same tools that pairs does.
+
+NEXT AND PREVIOUS                               *pairs-next*
+
+The following maps all correspond to normal mode commands. If a count is
+given, it becomes an argument to the command. A mnemonic for the "a" commands
+is "args" and for the "q" commands is "quickfix".
+
+      Type        Mapping   Command       Mapping   Command~
+      args        *[a*        |:previous|     *]a*        |:next|
+                  *[A*        |:first|        *]A*        |:last|
+
+      buffer      *[b*        |:bprevious|    *]b*        |:bnext|
+                  *[B*        |:bfirst|       *]B*        |:blast|
+
+      location    *[l*        |:lprevious|    *]l*        |:lnext|
+                  *[L*        |:lfirst|       *]L*        |:llast|
+                  *[<C-L>*    |:lpfile|       *]<C-L>*    |:lnfile|
+
+      quickfix    *[q*        |:cprevious|    *]q*        |:cnext|
+                  *[Q*        |:cfirst|       *]Q*        |:clast|
+                  *[<C-Q>*    |:cpfile|       *]<C-Q>*    |:cnfile|
+
+                  ~NOTE~: <C-Q> only works in a terminal with flow control
+                          disabled with `stty -ixon`.
+
+      tab         *[t*        |:tprevious|    *]t*        |:tnext|
+                  *[T*        |:tfirst|       *]T*        |:tlast|
+                  *[<C-T>*    |:ptprevious|   *]<C-T>*    |:ptnext|
+
+      files       *[f* *]f*
+
+                  Goes to the previous (`[f`) or next (`]f`) file
+                  alphabetically relative to the current file. In the
+                  |quickfix| window, this is equivalent to |:colder| and
+                  |:cnewer|.
+
+      diff        *[n* *]n*
+
+                  Goes to the previous (`[n`) or next (`]n`) source control
+                  conflict marker or diff/patch hunk. Try `d[n` or `d]n`
+                  inside a conflict.
+
+LINE OPERATIONS                                 *pairs-lines*
+
+These maps operate on the current line.
+
+                                                *[<Space>*
+[<Space>                Add [count] blank lines above the cursor.
+
+                                                *]<Space>*
+]<Space>                Add [count] blank lines below the cursor.
+
+                                                *[e* *v_[e*
+[e                      Exchange the current line or selection with [count]
+                        lines above it.
+
+                                                *]e* *v_]e*
+]e                      Exchange the current line or selection with [count]
+                        lines below it.
+
+                                                *[e* *v_[e*
+[E                      Copy the current line or selection [count] lines above
+                        it.
+
+                                                *]e* *v_]e*
+]E                      Copy the current line or selection [count] lines below
+                        it.
+
+OPTION TOGGLING                                 *pairs-toggling*
+
+These maps toggle options. Most of these are single boolean flags, but some
+enforce boolean behaviour on other constructs. Unless otherwise noted, these
+settings are set local to the window or buffer using |:setlocal| or the
+equivalent.
+
+    On      Off     Toggle    Option/Notes ~
+    *[ob*     *]ob*     *yob*       |'background'| (global)
+                              `light` is on; `dark` is off
+    *[ot*     *]ot*     *yot*       |'colorcolumn'|
+                              On uses `+1` or the last value
+    *[oC*     *]oC*     *yoC*       |'conceallevel'|
+                              `2` is on; `0` is off
+    *[ou*     *]ou*     *you*       |'cursorcolumn'|
+    *[o|*     *]o|*     *yo|*
+    *[oc*     *]oc*     *yoc*       |'cursorline'|
+    *[o-*     *]o-*     *yo-*
+    *[o_*     *]o_*     *yo_*
+    *[ox*     *]ox*     *yox*       |'cursorline'| |'cursorcolumn'|
+    *[o+*     *]o+*     *yo+*       `x` or `+` like a crosshair
+    *[od*     *]od*     *yod*       |'diff'|
+                              Calls |:diffthis| and |:diffoff|
+    *[oe*     *]oe*     *yoe*       |'expandtab'|
+    *[oW*     *]oW*     *yoW*       |'formatoptions'| auto-wrap (|fo-t|)
+    *[oI*     *]oI*     *yoI*       |'incsearch'|
+    *[oS*     *]oS*     *yoS*       |'incsearch'| (global)
+    *[oh*     *]oh*     *yoh*       |'hlsearch'|
+    *[oi*     *]oi*     *yoi*       |'ignorecase'|
+    *[ol*     *]ol*     *yol*       |'list'|
+    *[on*     *]on*     *yon*       |'number'|
+    *[or*     *]or*     *yor*       |'relativenumber'|
+    *[o;*     *]o;*     *yo;*       |'showcmd'|
+    *[os*     *]os*     *yos*       |'spell'|
+    *[oy*     *]oY*     *yoy*       |syntax|
+    *[oY*     *]oY*     *yoY*       |syntax| (global)
+    *[ov*     *]ov*     *yov*       |'virtualedit'|
+    *[ow*     *]ow*     *yow*       |'wrap'|
+
+The mnemonic for y is that if you tilt it a bit it looks like a switch.
+
+                                                *<s* *>s* *=s*
+Alternative prefixes for on/off/toggle: <s, >s, =s.
+
+PASTING                                         *pairs-pasting*
+
+These maps are experimental:
+
+*>p*    Paste after linewise, increasing indent.
+*>P*    Paste before linewise, increasing indent.
+*<p*    Paste after linewise, decreasing indent.
+*<P*    Paste before linewise, decreasing indent.
+*=p*    Paste after linewise, reindenting.
+*=P*    Paste before linewise, reindenting.
+
+|]p|, |[p|, |[P|, and |]P| have also been remapped to force linewise pasting,
+while preserving their usual indent matching behavior.
+
+                                                *[op* *]op* *yop*
+A toggle has not been provided for 'paste' because the typical use case of
+wrapping of a solitary insertion is inefficient:  You toggle twice, but
+you only paste once (YOPO).  Instead, press [op, ]op, or yop to invoke |O|,
+|o|, or |0||C| with 'paste' already set.  Leaving insert mode sets 'nopaste'
+automatically.
+
+ENCODING AND DECODING                           *pairs-encoding*
+
+Each of these operations has a map that takes a motion, a map that
+targets [count] lines, and a visual mode map.  The linewise variant integrates
+with repeat.vim.
+
+Mnemonic: encoding always comes before decoding; "[" always comes before "]".
+
+                                                *[x* *[xx* *v_[x*
+[x{motion}              XML encode.
+[xx                     <foo bar="baz"> => &lt;foo bar=&quot;baz&quot;&gt;
+{Visual}[x
+
+                                                *]x* *]xx* *v_]x*
+]x{motion}              XML decode.  HTML entities are handled as well.
+]xx
+{Visual}]x
+
+                                                *[u* *[uu* *v_[u*
+[u{motion}              URL encode.
+[uu                     foo bar => foo%20bar
+{Visual}[u
+
+                                                *]u* *]uu* *v_]u*
+]u{motion}              URL decode.
+]uu
+{Visual}]u
+
+                                        *[y* *[yy* *v_[y* *[C* *[CC* *v_[C*
+[y{motion}              C String encode.  Backslash escape control
+[yy                     characters, quotation marks, and backslashes.
+{Visual}[y
+[C{motion}
+[CC
+{Visual}[C
+
+                                        *]y* *]yy* *v_]y* *]C* *]CC* *v_]C*
+]y{motion}              C String decode.
+]yy
+{Visual}]y
+]C{motion}
+]CC
+{Visual}]C
+
+MAPPING FUNCTIONS                           *pairs-mapping-functions*
+
+A number of functions have been exported from `autoload/pairs.vim` for
+defining pair definitions. These can be accessed via |import-autoload|:
+>
+    import autoload 'pairs.vim'
+<
+
+                                                    *pairs#Map()* *pairs.Map()*
+pairs#Map({mode}: string, {lhs}: string, {rhs}: string, flags: {string} = ''): string
+pairs.Map({mode}: string, {lhs}: string, {rhs}: string, flags: {string} = ''): string
+
+Returns the command string to define a single |:map| for {mode} of {lhs} to
+execute {rhs}.
+>
+    pairs.Map('n', '[n', '<Plug>(pairs-context-previous)')
+    # => "nmap [n <Plug>(pairs-context-previous)"
+<
+If {rhs} does not begin with the string |<Plug>|, then |:map-<script>| will be
+added to the {flags} value, which may be any |:map-arguments| value
+(|:map-<buffer>|, |:map-<nowait>|, |:map-<silent>|, |:map-<special>|,
+|:map-<script>|, |:map-<expr>|, |:map-<unique>|).
+
+                                      *pairs#MapFeature()* *pairs.MapFeature()*
+pairs#MapFeature({mapset}: list<string> | string, {feature}: dict<string>)
+pairs.MapFeature({mapset}: list<string> | string, {feature}: dict<string>)
+
+Define a feature switch for a given {mapset}, which must be a string or list
+of string representing the characters to map to the feature switch.
+
+The {feature} dictionary must have `enable`, `disable` and either `test` or
+`toggle` keys. If `test` is present, it will be turned into a conditional
+expression. Otherwise, the `toggle` value will be used by itself (for
+a function call, see below). Because `<ScriptCmd>` is used, `<C-R>=`
+expressions are unavailable in `toggle`.
+
+The {feature} dictionary may have an `after` key which will be appended to each
+of the on, off, and toggle mappings.
+
+Given the way that vim mapping and scoping works with |<ScriptCmd>|, functions
+must either be defined in `pairs/autoload.vim` or must be global functions.
+Script-local or vim9 namespaced functions cannot be used. The following
+functions are available in `pairs/autoload.vim` and can be used when defining
+features:
+
+- `PairsStatuslineRefresh()`: forces a reresh of the status line
+- `PairsColorColumn()`: saves and returns the current |colorcolumn|
+- `PairsSetBackground()`: safely changes the background colour scheme,
+  reverting back if doing so will change the colour scheme.
+
+                          *pairs#MapBooleanOption()* *pairs#MapBooleanOption()*
+pairs#MapBooleanOption({mapset}: list<string> | string, {op}: string, {mode}: string)
+pairs.MapBooleanOption({mapset}: list<string> | string, {op}: string, {mode}: string)
+
+Defines a map feature switch for a standard on/off |options| flag. This uses
+|pairs.MapFeature()| to create the feature.
+
+                                  *pairs#MapTransform()* *pairs.MapTransform()*
+pairs#MapTransform({map}: string, {type}: string, {direction}: string)
+pairs.MapTransform({map}: string, {type}: string, {direction}: string)
+
+Defines mappings to encode or decode the text under a motion, tied to {map}.
+The transformation function is built from {type}{direction}:
+>
+    pairs.MapTransform('[y', 'String', 'Encode')
+    # Defines maps that transform text using the function StringEncode()
+<
+
+Only functions predefined in `autoload/pairs.vim` or global functions may be
+used. The predefined functions available are:
+
+- `StringEncode()`: Encode the text as a C string, using backslash to escape
+  control characters, quotation marks, and backslashes.
+- `StringDecode()`: Decode the text as if it were C string.
+- `UrlEncode()`: encode any non-printable characters with percent hex encoding
+  (`%20`` for space, etc.) for use in a URL.
+- `UrlEncode()`: decode a `UrlEncode`d string.
+- `XmlEncode()`: Encode XML-unsafe characters as entities.
+- `XmlDecode()`: Decode XML entities.
+
+ vim:tw=78:et:ft=help:norl:
